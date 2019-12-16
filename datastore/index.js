@@ -22,10 +22,10 @@ const readDirectory = (location, callback = ()=> {}) => {
 const readSomething = (location, name, callback) => {
   fs.readFile(location + `/${name}.txt`, (err, data) => {
     if (err) {
-      throw (`Error reading file id: ${name}`);
+      callback(err);
       return;
     }
-    callback(null, data);
+    callback(err, data);
   });
 };
 
@@ -69,12 +69,21 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  readSomething(exports.dataDir, id, (err, data) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+      return;
+    }
+    console.log({id, data: data.toString()});
+    callback(null, { id, text: data.toString() });
+  });
+
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.update = (id, text, callback) => {
