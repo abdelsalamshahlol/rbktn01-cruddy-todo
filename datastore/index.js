@@ -4,6 +4,22 @@ const _ = require('underscore');
 const counter = require('./counter');
 
 var items = {};
+/**
+ * Helper functions
+ */
+
+const readSomething = ()=> {
+
+};
+
+const writeSomething = (location, name, content, callback = ()=> {})=> {
+  fs.writeFile(location + `/${name}.txt`, content, (err)=> {
+    if (err) {
+      throw (`Error saving todo id: ${name} text: ${content}`);
+    }
+    // callback(name, content);
+  });
+};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
@@ -17,12 +33,7 @@ exports.create = (text, callback) => {
     items[id] = text;
 
     // Create todo file
-    fs.writeFile(exports.dataDir + `/${id}.txt`, text, (err)=> {
-      if (err) {
-        throw (`Error saving todo id: ${id} text: ${text}`);
-      }
-    });
-
+    writeSomething(exports.dataDir, id, text, (id, text)=> console.log(`writing ${id} ${text} to disk`));
     callback(null, { id, text});
   });
 };

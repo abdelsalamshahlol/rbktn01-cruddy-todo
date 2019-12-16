@@ -45,10 +45,10 @@ exports.getNextUniqueId = (callback)=> {
       return;
     }
     // Assign value from disk to global var
-    counter = number;
-    counter++;
+    counter = number++;
+    // counter++;
 
-    writeCounter(counter, (err, id)=> {
+    writeCounter(number, (err, id)=> {
       if (err) {
         throw ('Error writing to disk');
         return;

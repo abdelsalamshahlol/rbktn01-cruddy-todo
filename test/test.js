@@ -91,6 +91,7 @@ describe('todos', () => {
       const todoText = 'walk the dog';
       todos.create(todoText, (err, todo) => {
         const todoFileContents = fs.readFileSync(path.join(todos.dataDir, `${todo.id}.txt`)).toString();
+        console.log({todoFileContents, todoText});
         expect(todoFileContents).to.equal(todoText);
         done();
       });
