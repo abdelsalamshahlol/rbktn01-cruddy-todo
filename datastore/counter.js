@@ -44,13 +44,14 @@ exports.getNextUniqueId = (callback)=> {
       throw ('Error reading number');
       return;
     }
+    counter = number;
     counter++;
     writeCounter(counter, (err, id)=> {
-      console.log('ID from write ' + id)
+      // console.log('ID from write ' + id);
       callback(err, id);
     });
   });
-}
+};
 // exports.getNextUniqueId = () => {
 //   counter = counter + 1;
 //   return zeroPaddedNumber(counter);

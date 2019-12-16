@@ -13,7 +13,7 @@ exports.create = (text, callback) => {
       throw ('Error creating ID on @ create()');
       return;
     }
-    console.log({id, text, items});
+    // console.log({id, text, items});
     items[id] = text;
     callback(null, { id, text});
   });
