@@ -44,20 +44,20 @@ exports.getNextUniqueId = (callback)=> {
       throw ('Error reading number');
       return;
     }
+    // Assign value from disk to global var
     counter = number;
     counter++;
+
     writeCounter(counter, (err, id)=> {
-      // console.log('ID from write ' + id);
+      if (err) {
+        throw ('Error writing to disk');
+        return;
+      }
+      // Invoke callback from other methods
       callback(err, id);
     });
   });
 };
-// exports.getNextUniqueId = () => {
-//   counter = counter + 1;
-//   return zeroPaddedNumber(counter);
-// };
-
-
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 

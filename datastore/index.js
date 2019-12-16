@@ -15,6 +15,14 @@ exports.create = (text, callback) => {
     }
     // console.log({id, text, items});
     items[id] = text;
+
+    // Create todo file
+    fs.writeFile(exports.dataDir + `/${id}.txt`, text, (err)=> {
+      if (err) {
+        throw (`Error saving todo id: ${id} text: ${text}`);
+      }
+    });
+
     callback(null, { id, text});
   });
 };
