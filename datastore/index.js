@@ -2,22 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
-
-var items = {};
-
-/**
- * Helper functions
- */
-
-const readDirectory = (location, callback = ()=> {}) => {
-  fs.readdir(location, (err, files) => {
-    if (err) {
-      throw (`Error reading directory ${location}`);
-      return;
-    }
-    callback(err, files);
-  });
-};
+const fsPromise = fs.promises;
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
@@ -38,14 +23,29 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  readDirectory(exports.dataDir, (err, files) => {
+  fs.readdir(exports.dataDir, (err, files) => {
+    if (err) {
+      throw (`Error reading directory ${exports.dataDir}`);
+      return;
+    }
     files = _.map(files, (file) => {
-      return {
-        id: file.split(/\./)[0],
-        text: file.split(/\./)[0]
-      };
+      /*
+        Expermential Node function
+        reads the file content using Async (Promise Based)
+      */
+      return fsPromise.readFile(path.join(exports.dataDir, file))
+        .then((text)=>{
+          return {
+            id: file.split('.')[0],
+            text: text.toString()
+          };
+        });
     });
-    callback(null, files);
+
+    // Wait for all Promises to resolve
+    Promise.all(files).then((values) => {
+      callback(err, values);
+    });
   });
 };
 
