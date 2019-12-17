@@ -35,7 +35,7 @@ const writeSomething = (location, name, content, callback = ()=> {})=> {
       throw (`Error saving todo id: ${name} text: ${content}`);
       return;
     }
-    // callback(name, content);
+    callback(name, content);
   });
 };
 
@@ -47,18 +47,19 @@ exports.create = (text, callback) => {
       throw ('Error creating ID on @ create()');
       return;
     }
-    // console.log({id, text, items});
-    items[id] = text;
-
     // Create todo file
-    writeSomething(exports.dataDir, id, text, (id, text)=> console.log(`writing ${id} ${text} to disk`));
-    callback(null, { id, text});
+    fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, (err) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, {id, text});
+    });
   });
 };
 
 exports.readAll = (callback) => {
   readDirectory(exports.dataDir, (err, files) => {
-    files = files.map(file => {
+    files = _.map(files, (file) => {
       return {
         id: file.split(/\./)[0],
         text: file.split(/\./)[0]
