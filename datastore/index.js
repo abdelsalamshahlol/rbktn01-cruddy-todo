@@ -70,21 +70,12 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  readSomething(exports.dataDir, id, (err, data) => {
+  fs.readFile(path.join(exports.dataDir, `${id}.txt`), (err, content) => {
     if (err) {
-      callback(new Error(`No item with id: ${id}`));
-      return;
+      return callback(new Error(`No item with id: ${id}`));
     }
-    console.log({id, data: data.toString()});
-    callback(null, { id, text: data.toString() });
+    callback(null, {id, text: content.toString()});
   });
-
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
 };
 
 exports.update = (id, text, callback) => {
