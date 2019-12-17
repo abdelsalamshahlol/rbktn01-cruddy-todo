@@ -19,26 +19,6 @@ const readDirectory = (location, callback = ()=> {}) => {
   });
 };
 
-const readSomething = (location, name, callback) => {
-  fs.readFile(location + `/${name}.txt`, (err, data) => {
-    if (err) {
-      callback(err);
-      return;
-    }
-    callback(err, data);
-  });
-};
-
-const writeSomething = (location, name, content, callback = ()=> {})=> {
-  fs.writeFile(location + `/${name}.txt`, content, (err)=> {
-    if (err) {
-      throw (`Error saving todo id: ${name} text: ${content}`);
-      return;
-    }
-    callback(name, content);
-  });
-};
-
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
